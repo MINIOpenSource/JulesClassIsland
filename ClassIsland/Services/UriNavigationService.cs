@@ -13,9 +13,9 @@ namespace ClassIsland.Services;
 
 public class UriNavigationService : IUriNavigationService
 {
-    private readonly NotificationHostService _notificationHostService;
+    private readonly INotificationHostService _notificationHostService;
 
-    public UriNavigationService(ILogger<UriNavigationService> logger, IIpcService ipcService, NotificationHostService notificationHostService)
+    public UriNavigationService(ILogger<UriNavigationService> logger, IIpcService ipcService, INotificationHostService notificationHostService)
     {
         Logger = logger;
         IpcService = ipcService;

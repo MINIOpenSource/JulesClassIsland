@@ -77,5 +77,5 @@ public interface INotificationHostService : IHostedService, INotifyPropertyChang
     /// <param name="settings">要保存的设置</param>
     void WriteNotificationProviderSettings<T>(Guid id, T settings);
 
-    internal void CancelAllNotifications();
+    void CancelAllNotifications();
 }
