@@ -5,6 +5,7 @@ using System.Windows;
 using ClassIsland.Core.Abstractions.Services;
 using ClassIsland.Core.Controls.CommonDialog;
 using ClassIsland.Core.Models.UriNavigation;
+using ClassIsland.Services.NotificationServices;
 using ClassIsland.Shared.IPC.Abstractions.Services;
 using dotnetCampus.Ipc.CompilerServices.GeneratedProxies;
 using Microsoft.Extensions.Logging;
@@ -13,12 +14,19 @@ namespace ClassIsland.Services;
 
 public class UriNavigationService : IUriNavigationService
 {
-    public UriNavigationService(ILogger<UriNavigationService> logger, IIpcService ipcService)
+    private readonly NotificationHostService _notificationHostService;
+
+    public UriNavigationService(ILogger<UriNavigationService> logger, IIpcService ipcService, NotificationHostService notificationHostService)
     {
         Logger = logger;
         IpcService = ipcService;
+        _notificationHostService = notificationHostService;
 
         IpcService.IpcProvider.CreateIpcJoint<IPublicUriNavigationService>(this);
+        HandleAppNavigation("clearAllNotifications", args =>
+        {
+            _notificationHostService.CancelAllNotifications();
+        });
     }
 
     private ILogger<UriNavigationService> Logger { get; }
