@@ -5,7 +5,6 @@ using System.Windows;
 using ClassIsland.Core.Abstractions.Services;
 using ClassIsland.Core.Controls.CommonDialog;
 using ClassIsland.Core.Models.UriNavigation;
-using ClassIsland.Services.NotificationServices;
 using ClassIsland.Shared.IPC.Abstractions.Services;
 using dotnetCampus.Ipc.CompilerServices.GeneratedProxies;
 using Microsoft.Extensions.Logging;
