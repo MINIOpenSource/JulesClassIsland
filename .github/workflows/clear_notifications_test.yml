@@ -1,7 +1,6 @@
 name: Test Clear All Notifications URI
 
-on:
-  workflow_dispatch:
+on: push
 
 jobs:
   test_clear_all_notifications_uri:
@@ -35,3 +34,31 @@ jobs:
 
       - name: Wait for URI to be processed
         run: Start-Sleep -Seconds 5
+
+      - name: Verify notifications cleared in logs
+        shell: pwsh
+        run: |
+          $logDir = "ClassIsland/bin/Release/net8.0-windows/Logs"
+          Write-Host "Checking for logs in: $logDir"
+          if (Test-Path $logDir) {
+            $latestLog = Get-ChildItem -Path $logDir -Filter "*.log" | Sort-Object LastWriteTime -Descending | Select-Object -First 1
+            if ($latestLog) {
+              Write-Host "Found log file: $($latestLog.FullName)"
+              $logContent = Get-Content -Path $latestLog.FullName -Raw
+              $expectedMessage = "All notifications successfully cancelled via CancelAllNotifications method."
+              if ($logContent -match [regex]::Escape($expectedMessage)) {
+                Write-Host "Success: Verification message found in log."
+              } else {
+                Write-Host "Error: Verification message NOT found in log."
+                Write-Host "Log content:"
+                Write-Host $logContent
+                exit 1
+              }
+            } else {
+              Write-Host "Error: No log files found in $logDir"
+              exit 1
+            }
+          } else {
+            Write-Host "Error: Log directory $logDir not found."
+            exit 1
+          }

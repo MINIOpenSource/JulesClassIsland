@@ -687,9 +687,11 @@ public partial class App : AppBase, IAppHost
                     "classisland.notification.weather", "显示天气提醒", PackIconKind.SunWirelessOutline);
                 services.AddAction("classisland.app.quit", "退出 ClassIsland", PackIconKind.ExitToApp, (_, _) => Current.Stop());
                 services.AddAction<AppRestartActionSettings,AppRestartActionSettingsControl>("classisland.app.restart", "重启 ClassIsland", PackIconKind.Restart);
+                services.AddAction("classisland.notifications.clearAll", "清除所有提醒", PackIconKind.NotificationClearAll);
                 // 行动处理
                 services.AddHostedService<AppRestartActionHandler>();
                 services.AddHostedService<RunActionHandler>();
+                services.AddHostedService<ClearAllNotificationsActionHandler>();
                 services.AddHostedService<AppSettingsActionHandler>();
                 services.AddHostedService<SleepActionHandler>();
                 // 认证提供方
