@@ -269,7 +269,6 @@ public class NotificationHostService(SettingsService settingsService, ILogger<No
             var r = RequestQueue.Dequeue();
             r.CompletedTokenSource.Cancel();
         }
-        Logger.LogInformation("All notifications successfully cancelled via CancelAllNotifications method.");
     }
 
     public event PropertyChangedEventHandler? PropertyChanged;
