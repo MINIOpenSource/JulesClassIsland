@@ -26,7 +26,7 @@ jobs:
         run: dotnet build ClassIsland/ClassIsland.csproj -c Release
 
       - name: Run ClassIsland
-        run: Start-Process -FilePath "ClassIsland/bin/Release/net8.0-windows/ClassIsland.exe"
+        run: Start-Process -FilePath "ClassIsland/bin/Release/net8.0-windows/ClassIsland.exe" -ArgumentList "--skip-oobe"
 
       - name: Wait for ClassIsland to start
         run: Start-Sleep -Seconds 10

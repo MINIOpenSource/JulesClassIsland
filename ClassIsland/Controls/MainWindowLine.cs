@@ -4,7 +4,6 @@ using System.Linq;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Markup;
-using System.Windows.Media;
 using System.Windows.Media.Animation;
 using System.Windows.Threading;
 using System.Xml.Linq;
@@ -192,15 +191,6 @@ public class MainWindowLine : Control
         {
             return null;
         }
-        Logger.LogTrace("Begin Storyboard {} on MainWindowLine {}", name, GetHashCode());
-#if DEBUG
-        //Logger.LogTrace("{}", VisualTreeUtils.DumpVisualTree(this));
-#endif
-        // 当控件即将被卸载时，子元素为空，此时不能播放故事板。
-        if (VisualTreeHelper.GetChildrenCount(this) <= 0)
-        {
-            return null;
-        }
         var a = (Storyboard)FindResource(name);
         GridWrapper?.BeginStoryboard(a);
         return a;
@@ -297,33 +287,15 @@ public class MainWindowLine : Control
         if (GridWrapper != null)
         {
             GridWrapper.Loaded -= GridWrapperOnLoaded;
-            GridWrapper.Unloaded -= GridWrapperOnUnloaded;
-            GridWrapper.Unloaded += GridWrapperOnUnloaded;
         }
 
+        _isTemplateApplied = true;
 
-        Dispatcher.BeginInvoke(() =>
+        Logger.LogDebug("LastStoryboardName = {}", LastStoryboardName);
+        if (IsMainLine && LastStoryboardName != null && IsOverlayOpen)
         {
-            _isTemplateApplied = true;
-            Logger.LogDebug("LastStoryboardName = {}", LastStoryboardName);
-            if (IsMainLine && LastStoryboardName != null && IsOverlayOpen)
-            {
-                BeginStoryboard(LastStoryboardName);
-            }
-        }, DispatcherPriority.Loaded);
-    }
-
-    private void GridWrapperOnUnloaded(object sender, RoutedEventArgs e)
-    {
-        if (GridWrapper != null)
-        {
-            GridWrapper.Unloaded -= GridWrapperOnUnloaded;
-            GridWrapper.Loaded -= GridWrapperOnLoaded;
-            GridWrapper.Loaded += GridWrapperOnLoaded;
+            BeginStoryboard(LastStoryboardName);
         }
-
-        Logger.LogTrace("GridWrapper Unloaded");
-        _isTemplateApplied = false;
     }
 
     private void WrapperOnSizeChanged(object sender, SizeChangedEventArgs e)
